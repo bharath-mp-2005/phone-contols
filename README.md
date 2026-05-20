@@ -8,12 +8,12 @@ A premium cross-platform wireless touchpad utility that lets you control an Andr
 
 ```mermaid
 graph TD
-    subgraph Desktop (Electron Client)
+   subgraph Desktop["Electron Client"]
         UI[Renderer UI] -->|Pointer Events| Gestures[Gesture Parser]
         Gestures -->|JSON over WS| WSClient[WebSocket Client]
     end
 
-    subgraph Android (Kotlin Server)
+   subgraph Android["Kotlin Server"]
         WSServer[WebSocket Server] -->|Incoming Packets| ForeService[TouchpadService]
         ForeService -->|System Actions & Gestures| AccService[TouchpadAccessibilityService]
         ForeService -->|Lock Action| AdminRec[TouchpadAdminReceiver]
