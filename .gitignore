@@ -1,0 +1,36 @@
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor settings and local workspace state
+.idea/
+*.iml
+.vscode-test/
+
+# Environment files
+.env
+.env.*
+
+# Node / Electron
+desktop/node_modules/
+desktop/dist/
+desktop/out/
+desktop/npm-debug.log*
+desktop/yarn-debug.log*
+desktop/yarn-error.log*
+
+# Android / Gradle
+android/.gradle/
+android/local.properties
+android/build/
+android/app/build/
+android/**/build/
+android/captures/
+android/.externalNativeBuild/
+android/.cxx/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp

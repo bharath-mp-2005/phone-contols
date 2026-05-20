@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src ws: wss:;">
+  <title>Phone Scroller</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Title Bar -->
+    <div class="title-bar">
+      <span class="title-bar__text">Phone Scroller</span>
+      <div class="title-bar__actions">
+        <button class="title-bar__action-btn" id="minimizeBtn" aria-label="Minimize window">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+        <button class="title-bar__action-btn" id="settingsToggle" aria-label="Toggle settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="connection-status" id="connectionStatus">
+      <div class="connection-status__dot"></div>
+      <span class="connection-status__text" id="connectionText">Disconnected</span>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+      <div class="settings-panel__inner">
+        <div class="settings-panel__row">
+          <div class="settings-panel__field">
+            <label class="settings-panel__label" for="ipInput">IP Address</label>
+            <input class="settings-panel__input" type="text" id="ipInput" placeholder="192.168.1.100" spellcheck="false" autocomplete="off">
+          </div>
+          <div class="settings-panel__field" style="max-width: 90px;">
+            <label class="settings-panel__label" for="portInput">Port</label>
+            <input class="settings-panel__input" type="text" id="portInput" placeholder="8080" spellcheck="false" autocomplete="off">
+          </div>
+        </div>
+        <div class="settings-panel__slider-group">
+          <div class="settings-panel__slider-header">
+            <label class="settings-panel__label" for="opacitySlider">Window Opacity</label>
+            <span class="settings-panel__slider-value" id="opacityValue">100%</span>
+          </div>
+          <input class="settings-panel__slider" type="range" id="opacitySlider" min="30" max="100" value="100">
+        </div>
+        <button class="settings-panel__connect-btn" id="connectBtn">Connect</button>
+      </div>
+    </div>
+
+    <!-- Touchpad Surface -->
+    <div class="touchpad" id="touchpad">
+      <div class="touchpad__hint">
+        <div class="touchpad__hint-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9l6 6 6-6"/>
+            <path d="M6 15l6 6 6-6" opacity="0.4"/>
+          </svg>
+        </div>
+        <span class="touchpad__hint-text">Scroll Area</span>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <!-- Click -->
+      <button class="action-bar__btn" id="btnClick" data-tooltip="Click">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
+        </svg>
+      </button>
+      <!-- Home -->
+      <button class="action-bar__btn" id="btnHome" data-tooltip="Home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11l2 2m-2-2v10a1 1 0 0 1-1 1h-3m-4 0a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2z"/>
+        </svg>
+      </button>
+      <!-- Back -->
+      <button class="action-bar__btn" id="btnBack" data-tooltip="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"/>
+          <path d="M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <!-- Recents -->
+      <button class="action-bar__btn" id="btnRecents" data-tooltip="Recents">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+      </button>
+      <!-- Lock -->
+      <button class="action-bar__btn" id="btnLock" data-tooltip="Lock">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="11" width="14" height="10" rx="2"/>
+          <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+        </svg>
+      </button>
+      <!-- Scroll Up -->
+      <button class="action-bar__btn" id="btnScrollUp" data-tooltip="Scroll Up">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </button>
+      <!-- Scroll Down -->
+      <button class="action-bar__btn" id="btnScrollDown" data-tooltip="Scroll Down">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Resize visual cue -->
+    <div class="resize-handle">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+        <path d="M13 1L1 13"/>
+        <path d="M13 5L5 13"/>
+        <path d="M13 9L9 13"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
