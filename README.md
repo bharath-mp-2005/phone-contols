@@ -38,6 +38,31 @@ graph TD
 
 ---
 
+## Advanced Gesture & Pointer Controls
+
+This system features premium, contextual input controls, including mouse multi-tap parsing and webcam-based AI hand tracking.
+
+### 1. Contextual Touchpad Gestures
+- **Dynamic Pointer Visibility:** The cursor pointer on the Android screen automatically disappears when the desktop client is disconnected and appears only when a connection is actively open.
+- **Touchpad Tap & Drag Gestures:**
+  - **Two Taps & Move:** Simulates moving the pointer cursor on the phone screen.
+  - **Three Taps & Move:** Simulates scrolling the content up and down on the phone screen.
+
+### 2. AI Air Gestures (Webcam-Based)
+Toggle camera access in the desktop title bar to enable touch-free controls. The camera and tracking loop are **turned off by default**.
+
+The system utilizes strict **Google MediaPipe Hands** pose classification to avoid gesture collisions:
+* **Pointing Pose (Index finger extended, other fingers closed):**
+  - **Scroll Down (Reveal lower content):** Swipe index finger UP.
+  - **Scroll Up (Reveal higher content):** Swipe index finger DOWN.
+* **Open Hand Pose (All fingers extended open):**
+  - **Lock Screen:** Wave your open palm horizontally.
+* **Pinch Pose (Index and Thumb tips touching):**
+  - **Click:** Pinch your index finger and thumb tips together. (This is only checked when index finger is curved/folded, completely avoiding collisions with swipe down).
+* **1.5s Resting Cooldown:** After triggering a gesture, a 1.5-second cooldown is enforced to let you return to a rest position. The status indicator displays `RESTING - hold position` in amber.
+
+---
+
 ## Folder Structure
 
 ```text

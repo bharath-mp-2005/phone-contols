@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src ws: wss:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src ws: wss: https://cdn.jsdelivr.net; worker-src 'self' blob:;">
   <title>Phone Scroller</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  
+  <!-- MediaPipe Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="app-container">
@@ -17,6 +21,12 @@
     <div class="title-bar">
       <span class="title-bar__text">Phone Scroller</span>
       <div class="title-bar__actions">
+        <button class="title-bar__action-btn" id="cameraToggle" aria-label="Toggle camera gestures">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+        </button>
         <button class="title-bar__action-btn" id="minimizeBtn" aria-label="Minimize window">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -71,6 +81,25 @@
           </svg>
         </div>
         <span class="touchpad__hint-text">Scroll Area</span>
+      </div>
+
+      <!-- Camera Gesture Panel (Starts Hidden) -->
+      <div class="camera-panel" id="cameraPanel">
+        <div class="camera-panel__header">
+          <span class="camera-panel__title">AI Air Gestures</span>
+          <button class="camera-panel__close" id="btnDisableCamera" aria-label="Disable camera">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="camera-panel__body">
+          <video class="camera-panel__video" id="cameraVideo" autoplay playsinline muted></video>
+          <canvas class="camera-panel__canvas" id="cameraCanvas" width="80" height="60"></canvas>
+          <div class="camera-panel__gesture-alert" id="cameraGestureAlert">Gesture Active</div>
+        </div>
+        <div class="camera-panel__status" id="cameraStatus">Webcam off</div>
       </div>
     </div>
 

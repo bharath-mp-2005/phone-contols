@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, session } = require('electron');
 const path = require('path');
 
 let mainWindow = null;
@@ -47,7 +47,15 @@ ipcMain.handle('minimize-window', () => {
   }
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
+    if (permission === 'media') {
+      return callback(true);
+    }
+    callback(false);
+  });
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   app.quit();
