@@ -61,6 +61,7 @@ class TouchpadService : Service() {
             clientCount = connections.size
             Log.i(TAG, "Client connected: ${conn?.remoteSocketAddress} (total: $clientCount)")
             broadcastStatus()
+            TouchpadAccessibilityService.instance?.showCursor(true)
         }
 
         override fun onClose(conn: WebSocket?, code: Int, reason: String?, remote: Boolean) {
@@ -68,6 +69,9 @@ class TouchpadService : Service() {
             if (clientCount < 0) clientCount = 0
             Log.i(TAG, "Client disconnected: ${conn?.remoteSocketAddress} (total: $clientCount)")
             broadcastStatus()
+            if (clientCount == 0) {
+                TouchpadAccessibilityService.instance?.showCursor(false)
+            }
         }
 
         override fun onMessage(conn: WebSocket?, message: String?) {
@@ -140,6 +144,7 @@ class TouchpadService : Service() {
         isRunning = false
         clientCount = 0
         broadcastStatus()
+        TouchpadAccessibilityService.instance?.showCursor(false)
         Log.i(TAG, "Service destroyed")
         super.onDestroy()
     }

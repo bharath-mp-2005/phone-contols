@@ -478,6 +478,13 @@
       } else if (state.tapCount === 2 || state.tapCount === 3) {
         createRipple(x, y);
       }
+
+      // Reset tapCount immediately after drag/scroll/swipe gestures complete
+      state.tapCount = 0;
+      if (state.tapTimer) {
+        clearTimeout(state.tapTimer);
+        state.tapTimer = null;
+      }
     }
 
     // Schedule a timer to reset tapCount to 0 after doubleTapWindow

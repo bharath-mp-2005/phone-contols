@@ -47,7 +47,9 @@ class TouchpadAccessibilityService : AccessibilityService() {
             val screenHeight = getScreenHeight()
             cursorX = screenWidth / 2f
             cursorY = screenHeight / 2f
-            setupCursorOverlay()
+            if (TouchpadService.clientCount > 0) {
+                setupCursorOverlay()
+            }
         }
     }
 
@@ -128,6 +130,16 @@ class TouchpadAccessibilityService : AccessibilityService() {
             cursorView = null
             windowManager = null
             layoutParams = null
+        }
+    }
+
+    fun showCursor(show: Boolean) {
+        mainHandler.post {
+            if (show) {
+                setupCursorOverlay()
+            } else {
+                removeCursorOverlay()
+            }
         }
     }
 
@@ -284,17 +296,21 @@ class TouchpadAccessibilityService : AccessibilityService() {
 
     fun performScrollAtCursor(dx: Float, dy: Float) {
         mainHandler.post {
+            val scrollScaleFactor = 6.0f
+            val amplifiedDx = dx * scrollScaleFactor
+            val amplifiedDy = dy * scrollScaleFactor
+            
             val startX = cursorX
             val startY = cursorY
-            val endX = (startX - dx).coerceIn(0f, getScreenWidth().toFloat())
-            val endY = (startY - dy).coerceIn(0f, getScreenHeight().toFloat())
+            val endX = (startX - amplifiedDx).coerceIn(0f, getScreenWidth().toFloat())
+            val endY = (startY - amplifiedDy).coerceIn(0f, getScreenHeight().toFloat())
  
             val path = Path().apply {
                 moveTo(startX, startY)
                 lineTo(endX, endY)
             }
-            buildAndDispatchGesture(path, 80L)
-            Log.d(TAG, "Scroll at cursor from ($startX, $startY) to ($endX, $endY)")
+            buildAndDispatchGesture(path, 120L)
+            Log.d(TAG, "Scroll at cursor from ($startX, $startY) to ($endX, $endY) [original dx=$dx, dy=$dy]")
         }
     }
  
